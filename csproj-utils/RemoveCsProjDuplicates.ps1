@@ -1,14 +1,5 @@
 <#  
-.SYNOPSIS  
-    Finds all csproj in the supplied path and removes all the duplicate entries.
-.DESCRIPTION  
-    This script finds all duplicate <content> and <compile> entries in csproj files,
-    and removes them.
-.NOTES  
-    File Name  : RemoveCsProjDuplicates.ps1  
-    Author     : Rodrigo F. Fernandes - github.com/rodrigoff
-.LINK  
-    https://github.com/rodrigoff/powershell/blob/master/csproj-utils/RemoveCsProjDuplicates.ps1
+https://github.com/vanyaraspopov/powershell/edit/master/csproj-utils/RemoveCsProjDuplicates.ps1
 #>
 Param(
     [string]$filePath = $(throw "You must supply a file path")
@@ -29,7 +20,7 @@ Foreach($projectFile in $projectFiles) {
     
     Write-Host "> $projectFile " -Foreground Green
 
-    $entries = $xml.Project.ItemGroup.Compile + $xml.Project.ItemGroup.Content | Group-Object Include
+    $entries = $xml.Project.ItemGroup.Compile + $xml.Project.ItemGroup.Content + $xml.Project.ItemGroup.Reference | Group-Object Include
     $duplicateEntries = $entries | Where-Object Count -gt 1
 
     "- Found $($duplicateEntries.Count) duplicate entries"
@@ -50,4 +41,3 @@ Foreach($projectFile in $projectFiles) {
 
     "- Removed $($duplicateEntries.Count) duplicate entries"
 }
-
